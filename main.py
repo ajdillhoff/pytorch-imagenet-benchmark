@@ -172,7 +172,7 @@ def main():
         num_workers=args.workers, pin_memory=True)
 
     if args.evaluate:
-        validate(val_loader, model, criterion)
+        validate(val_loader, model, criterion, 0, datetime.now())
         return
 
     for epoch in range(args.start_epoch, args.epochs):
@@ -184,7 +184,7 @@ def main():
         train(train_loader, model, criterion, optimizer, epoch)
 
         # evaluate on validation set
-        prec1, prec5 = validate(val_loader, model, criterion, start_time)
+        prec1, prec5 = validate(val_loader, model, criterion, 0, start_time)
 
         # remember best prec@1 and save checkpoint
         is_best = prec1 > best_prec1
@@ -247,7 +247,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
                    data_time=data_time, loss=losses, top1=top1, top5=top5))
 
 
-def validate(val_loader, model, criterion, start_time):
+def validate(val_loader, model, criterion, epoch, start_time):
     batch_time = AverageMeter()
     losses = AverageMeter()
     top1 = AverageMeter()
