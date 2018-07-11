@@ -62,7 +62,7 @@ parser.add_argument('--seed', default=None, type=int,
                     help='seed for initializing training. ')
 parser.add_argument('--gpu', default=None, type=int,
                     help='GPU id to use.')
-parser.add_argument('--log_path', default='./logs/log.txt', type=str,
+parser.add_argument('--log_path', default='./logs/', type=str,
                     help='Path to log file.')
 
 best_prec1 = 0
@@ -176,7 +176,6 @@ def main():
         return
 
     for epoch in range(args.start_epoch, args.epochs):
-        start_time = time.time()
         if args.distributed:
             train_sampler.set_epoch(epoch)
         adjust_learning_rate(optimizer, epoch)
@@ -294,10 +293,11 @@ def validate(val_loader, model, criterion, start_time):
     return top1.avg
 
 
-def log_epoch(file_path, epoch, total_time, prec1, prec5):
-    os.makedirs(file_path, exist_ok=True)
+def log_epoch(log_path, epoch, total_time, prec1, prec5):
+    os.makedirs(log_path, exist_ok=True)
+    file_path = os.path.join(log_path, 'log.txt')
     f = open(file_path, "a", 1)
-    f.write('{epoch}\t{total_time}\t{prec1}\t{prec5}')
+    f.write('{0}\t{1}\t{2:.3f}\t{3:.3f}\n'.format(epoch, total_time, prec1, prec5))
     f.close()
 
 
