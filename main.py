@@ -184,7 +184,7 @@ def main():
         train(train_loader, model, criterion, optimizer, epoch)
 
         # evaluate on validation set
-        prec1, prec5 = validate(val_loader, model, criterion, 0, start_time)
+        prec1 = validate(val_loader, model, criterion, epoch, start_time)
 
         # remember best prec@1 and save checkpoint
         is_best = prec1 > best_prec1
